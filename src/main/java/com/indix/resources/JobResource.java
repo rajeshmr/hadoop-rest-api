@@ -20,6 +20,7 @@ import java.util.Map;
 @Path("/jobs")
 public class JobResource {
     private JobInterface jobInterface;
+    private Map<String, Object> counters;
 
     public JobResource(JobClient jobClient) {
         jobInterface = new JobInterface(jobClient);
@@ -43,18 +44,8 @@ public class JobResource {
     @Path("/{jtIdentifier}/{id}/counters")
     public Response getJobCounters(@PathParam("jtIdentifier") String jtIdentifier,@PathParam("id") int id) throws IOException {
         JobID jobID = new JobID(jtIdentifier,id);
-        RunningJob runningJob = jobInterface.getJobDetails(jobID);
-        Counters counters = runningJob.getCounters();
-        Map<String,Object> response = new HashMap<String, Object>();
-        Counters.Counter c;
-        for (String groupName : counters.getGroupNames()) {
-            for(Iterator i = counters.getGroup(groupName).iterator();i.hasNext();){
-                c =((Counters.Counter)i.next());
-                response.put(c.getName(),c);
-//                System.out.println(((Counters.Counter)i.next()).getCounter());
-            }
-        }
-        return Response.ok().entity(response).build();
+        counters = jobInterface.getJobCounters(jobID);
+        return Response.ok().entity(counters).build();
     }
 
 }
