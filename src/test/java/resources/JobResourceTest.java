@@ -27,4 +27,11 @@ public class JobResourceTest extends ResourceTest {
         Response res = jobResource.getJobHistory();
         assertThat(res.getStatus(),is(200));
     }
+
+    @Test
+    public void shouldGetAllJobs() throws IOException {
+        Response res = jobResource.getJobs();
+        assertThat(res.getStatus(),is(200));
+    }
+
 }
