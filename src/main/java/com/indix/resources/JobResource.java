@@ -44,15 +44,17 @@ public class JobResource {
     public Response getJobCounters(@PathParam("jtIdentifier") String jtIdentifier,@PathParam("id") int id) throws IOException {
         JobID jobID = new JobID(jtIdentifier,id);
         RunningJob runningJob = jobInterface.getJobDetails(jobID);
-        Map<String,Object> counters = new HashMap<String,Object>();
-        Map<String,Object> counter;
-        for (Counters.Group group : runningJob.getCounters()) {
-            counter = new HashMap<String,Object>();
-            group.
+        Counters counters = runningJob.getCounters();
+        Map<String,Object> response = new HashMap<String, Object>();
+        Counters.Counter c;
+        for (String groupName : counters.getGroupNames()) {
+            for(Iterator i = counters.getGroup(groupName).iterator();i.hasNext();){
+                c =((Counters.Counter)i.next());
+                response.put(c.getName(),c);
+//                System.out.println(((Counters.Counter)i.next()).getCounter());
+            }
         }
-
-
-        return Response.ok().entity(counters).build();
+        return Response.ok().entity(response).build();
     }
 
 }
