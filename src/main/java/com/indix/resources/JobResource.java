@@ -21,6 +21,7 @@ import java.util.Map;
 public class JobResource {
     private JobInterface jobInterface;
     private Map<String, Object> counters;
+    private List<JobID> history;
 
     public JobResource(JobClient jobClient) {
         jobInterface = new JobInterface(jobClient);
@@ -46,6 +47,13 @@ public class JobResource {
         JobID jobID = new JobID(jtIdentifier,id);
         counters = jobInterface.getJobCounters(jobID);
         return Response.ok().entity(counters).build();
+    }
+
+    @GET
+    @Path("/history")
+    public Response getJobHistory() throws IOException {
+        history = jobInterface.getJobHistory();
+        return Response.ok().entity(history).build();
     }
 
 }

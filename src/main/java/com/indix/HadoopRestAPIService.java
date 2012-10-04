@@ -1,6 +1,8 @@
 package com.indix;
 
 import com.indix.configurations.HadoopRestAPIConfiguration;
+import com.indix.hadoop.HadoopConnection;
+import com.indix.hadoop.HadoopController;
 import com.indix.resources.JobResource;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Environment;
@@ -20,13 +22,9 @@ public class HadoopRestAPIService extends Service<HadoopRestAPIConfiguration> {
     }
     @Override
     protected void initialize(HadoopRestAPIConfiguration hadoopRestAPIConfiguration, Environment environment) throws Exception {
-        conf = new Configuration();
-        conf.addResource(new Path("/home/user5/hadoop/conf/core-site.xml"));
-        conf.addResource(new Path("/home/user5/hadoop/conf/hdfs-site.xml"));
-        conf.addResource(new Path("/home/user5/hadoop/conf/mapred-site.xml"));
-//        conf.set("mapred.job.tracker","localhost:9001");
-//        conf.set("fs.default.name","hdfs://localhost:9000");
-        jobClient = new JobClient(JobTracker.getAddress(conf),conf);
+        HadoopConnection hadoopConnection = new HadoopConnection(hadoopRestAPIConfiguration);
+        HadoopController hadoopController = new HadoopController(hadoopConnection);
+        jobClient = hadoopController.getJobClient();
         environment.addResource(new JobResource(jobClient));
     }
 }

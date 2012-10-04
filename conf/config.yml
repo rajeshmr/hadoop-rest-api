@@ -1,4 +1,2 @@
 hadoopHome: /home/user5/hadoop
 
-http:
-  port: 8080
