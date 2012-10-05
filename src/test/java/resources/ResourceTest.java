@@ -1,5 +1,8 @@
 package resources;
 
+import com.indix.configurations.HadoopRestAPIConfiguration;
+import com.indix.hadoop.HadoopConnection;
+import com.indix.hadoop.HadoopController;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.JobClient;
@@ -12,14 +15,11 @@ import java.io.IOException;
 public class ResourceTest {
 
     protected static JobClient jobClient;
-    protected static Configuration conf;
 
     @BeforeClass
     public static void initTestDeps() throws IOException {
-        conf = new Configuration();
-        conf.addResource(new Path("/home/user5/hadoop/conf/core-site.xml"));
-        conf.addResource(new Path("/home/user5/hadoop/conf/hdfs-site.xml"));
-        conf.addResource(new Path("/home/user5/hadoop/conf/mapred-site.xml"));
-        jobClient = new JobClient(JobTracker.getAddress(conf),conf);
+        HadoopConnection hadoopConnection = new HadoopConnection(new HadoopRestAPIConfiguration());
+        HadoopController hadoopController = new HadoopController(hadoopConnection);
+        jobClient = hadoopController.getJobClient();
     }
 }
