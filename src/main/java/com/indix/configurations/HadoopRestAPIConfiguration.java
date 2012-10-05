@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class HadoopRestAPIConfiguration extends Configuration {
 
     @NotEmpty @JsonProperty
-    private String hadoopHome = "/home/user5/hadoop/";
+    private String hadoopHome;
 
     public String getHadoopHome() {
         return hadoopHome;

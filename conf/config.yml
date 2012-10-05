@@ -1,2 +1,6 @@
 hadoopHome: /home/user5/hadoop
+http:
+  port: 8086
+  adminPort: 8087
+
 
